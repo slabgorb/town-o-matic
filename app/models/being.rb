@@ -5,5 +5,4 @@ class Being
   field :alive, :type => Boolean
   field :history, :type => Array
   field :gender, :type => String
-
 end

@@ -1,4 +1,4 @@
-= form_for @being do |f|
+= form_for @being, {class:'form-horizontal'} do |f|
   - if @being.errors.any?
     #error_explanation
       %h2= "#{pluralize(@being.errors.count, "error")} prohibited this being from being saved:"
@@ -6,20 +6,18 @@
         - @being.errors.full_messages.each do |msg|
           %li= msg
   .fieldset
-    .legend Name
-    %input.being-name{ type: 'text', name: "being['name'][]" }
-
-  .field
-    = f.label :age
-    = f.number_field :age
-  .field
-    = f.label :alive
-    = f.check_box :alive
-  .field
-    = f.label :history
-    = f.text_field :history
-  .field
-    = f.label :gender
-    = f.select :gender, [:male, :female, :neuter]
-  .actions
-    = f.submit 'Save'
+    .legend Being Information
+    .field
+      = f.label :name
+      %input.being-name{ type: 'text', placeholder: 'Name', name: "being['name'][]" }
+    .field
+      = f.label :age
+      = f.number_field :age
+    .field
+      = f.label :alive
+      = f.check_box :alive
+    .field
+      = f.label :gender
+      = f.select :gender, [:male, :female, :neuter]
+    .actions
+      = f.submit 'Save'
