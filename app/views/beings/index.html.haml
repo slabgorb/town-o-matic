@@ -1,22 +1,19 @@
 %h1 Listing beings
 
-%table
+%table.table.table-striped.table-bordered.table-condensed
   %tr
     %th Name
     %th Age
     %th Alive
-    %th History
     %th Gender
-    %th
-    %th
-    %th
+    %th{ colspan: 3 } Actions
 
   - @beings.each do |being|
     %tr
       %td= being.name
       %td= being.age
-      %td= being.alive
-      %td= being.history
+      %td
+        %i{ class: being.alive? ? 'icon
       %td= being.gender
       %td= link_to 'Show', being
       %td= link_to 'Edit', edit_being_path(being)
