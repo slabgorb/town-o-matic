@@ -1,0 +1,27 @@
+%h1 Listing beings
+
+%table
+  %tr
+    %th Name
+    %th Age
+    %th Alive
+    %th History
+    %th Gender
+    %th
+    %th
+    %th
+
+  - @beings.each do |being|
+    %tr
+      %td= being.name
+      %td= being.age
+      %td= being.alive
+      %td= being.history
+      %td= being.gender
+      %td= link_to 'Show', being
+      %td= link_to 'Edit', edit_being_path(being)
+      %td= link_to 'Destroy', being, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Being', new_being_path
