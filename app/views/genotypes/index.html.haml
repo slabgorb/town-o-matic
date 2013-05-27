@@ -1,0 +1,19 @@
+%h1 Listing genotypes
+
+%table
+  %tr
+    %th Genes
+    %th
+    %th
+    %th
+
+  - @genotypes.each do |genotype|
+    %tr
+      %td= genotype.genes
+      %td= link_to 'Show', genotype
+      %td= link_to 'Edit', edit_genotype_path(genotype)
+      %td= link_to 'Destroy', genotype, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Genotype', new_genotype_path

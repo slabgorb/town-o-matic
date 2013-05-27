@@ -1,0 +1,25 @@
+%h1 Listing phenotypes
+
+%table
+  %tr
+    %th Name
+    %th Morphology
+    %th Development
+    %th Behavior
+    %th
+    %th
+    %th
+
+  - @phenotypes.each do |phenotype|
+    %tr
+      %td= phenotype.name
+      %td= phenotype.morphology
+      %td= phenotype.development
+      %td= phenotype.behavior
+      %td= link_to 'Show', phenotype
+      %td= link_to 'Edit', edit_phenotype_path(phenotype)
+      %td= link_to 'Destroy', phenotype, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Phenotype', new_phenotype_path

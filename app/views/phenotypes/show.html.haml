@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @phenotype.name
+%p
+  %b Morphology:
+  = @phenotype.morphology
+%p
+  %b Development:
+  = @phenotype.development
+%p
+  %b Behavior:
+  = @phenotype.behavior
+
+= link_to 'Edit', edit_phenotype_path(@phenotype)
+\|
+= link_to 'Back', phenotypes_path

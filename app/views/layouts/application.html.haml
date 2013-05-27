@@ -9,11 +9,12 @@
     .navbar
       .navbar-inner
         .brand
-          = link_to 'Town-o-Matic', root_path
-        %ul.nav
-          %li= link_to 'new being', new_being_path
-          %li= link_to 'list beings', beings_path
+          %h4
+            = link_to 'Town-o-Matic', root_path
+        %ul.nav.span4
+          %li.span1= flat_button 'chevalier-on-horseback', new_being_path, size: 60
+          %li.span1= flat_button 'mermaid', beings_path, size: 60
     #wrapper
-      #content
+      #content.container-fluid.span16
         = yield
 

@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :being do
-    name ""
+    name ['Adam', 'Man']
     age 1
-    alive false
-    history ""
-    gender "MyString"
+    alive true
+    history []
+    gender 'male'
   end
 end

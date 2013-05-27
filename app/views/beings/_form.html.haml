@@ -5,8 +5,7 @@
       %ul
         - @being.errors.full_messages.each do |msg|
           %li= msg
-  .fieldset
-    .legend Being Information
+  .container-fluid
     .field
       = f.label :name
       %input.being-name{ type: 'text', placeholder: 'Name', name: "being['name'][]" }
