@@ -5,10 +5,10 @@
       %ul
         - @being.errors.full_messages.each do |msg|
           %li= msg
+  .fieldset
+    .legend Name
+    %input.being-name{ type: 'text', name: "being['name'][]" }
 
-  .field
-    = f.label :name
-    = f.text_field :name
   .field
     = f.label :age
     = f.number_field :age
@@ -20,6 +20,6 @@
     = f.text_field :history
   .field
     = f.label :gender
-    = f.text_field :gender
+    = f.select :gender, [:male, :female, :neuter]
   .actions
     = f.submit 'Save'

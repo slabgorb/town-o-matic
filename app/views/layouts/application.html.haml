@@ -1,0 +1,18 @@
+!!!
+%html
+  %head
+    %title Town-O-Matic
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  %body
+    .navbar.nav
+      .brand
+        Town-O-Matic
+      %ul.row-fluid
+        %li.nav= link_to 'new being', new_being_path
+        %li.nav= link_to 'list beings', beings_path
+    #wrapper
+      #content
+        = yield
+
