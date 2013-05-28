@@ -6,8 +6,10 @@ class Being
   field :history, :type => Array
   field :gender, :type => String
 
-  embeds_many :chromosomes
-  index "chromosome.genes" => 1
+  embeds_many :genotypes
+  index "genotypes.genes" => 1
+
+  has_one :phenotype
 
   has_and_belongs_to_many :spouses, class_name: 'Being'
   has_and_belongs_to_many :children, class_name: 'Being'
@@ -15,6 +17,15 @@ class Being
 
   scope :living, -> { where(alive: true) }
   scope :dead, -> { where(alive: false) }
+
+
+
+  ##
+  # Die!
+  #
+  def die!
+    update_attribute(alive: false)
+  end
 
 
   ##

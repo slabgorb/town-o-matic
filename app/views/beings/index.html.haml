@@ -12,8 +12,7 @@
     %tr
       %td= being.name
       %td= being.age
-      %td
-        %i{ class: being.alive? ? 'icon
+      %td= being.alive ? escape_once('&check;') : ''
       %td= being.gender
       %td= link_to 'Show', being
       %td= link_to 'Edit', edit_being_path(being)

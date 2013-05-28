@@ -1,7 +1,6 @@
 class Genotype
   include Mongoid::Document
   include Mongoid::Timestamps::Created
-  @@expressions = YAML::load(File.read(File.join(Rails.root, 'genetics', 'people.yml')))
   embedded_in :being
   field :genes, type: Array, default: []
   index({ genes: 1 })
