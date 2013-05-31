@@ -6,7 +6,7 @@ describe Being do
   end
 
   it 'makes the name from the array of names' do
-    @adam.name.should be('Adam Man')
+    @adam.name.should eq('Adam Man')
   end
 
   it 'defaults to being alive' do
@@ -16,6 +16,10 @@ describe Being do
   it 'can die' do
     @adam.die!
     @adam.alive?.should be_false
+  end
+
+  it 'has a genotype' do
+    @adam.genotype.should_not be_nil
   end
 
 end

@@ -2,10 +2,13 @@
 
 FactoryGirl.define do
   factory :being do
-    name ['Adam', 'Man']
-    age 1
+    names ['Adam', 'Man']
+    age 100
     alive true
     history []
     gender 'male'
+    genotype { FactoryGirl.build :genotype }
   end
 end
+
+
