@@ -6,8 +6,7 @@ class Being
   field :history, :type => Array
   field :gender, :type => String
 
-  embeds_many :genotypes
-  index "genotypes.genes" => 1
+  embeds_one :genotype
 
   has_one :phenotype
 
@@ -24,7 +23,7 @@ class Being
   # Die!
   #
   def die!
-    update_attribute(alive: false)
+    update_attribute(:alive,  false)
   end
 
 
@@ -40,6 +39,16 @@ class Being
   #
   def name
     names.join(' ')
+  end
+
+  ##
+  # Set the creatures' name
+  #
+  def name=(name)
+    if name.is_a? String
+      name = name.split(/\s/)
+    end
+    names = Array.new(name)
   end
 
   ##
