@@ -18,8 +18,10 @@ describe Being do
     @adam.alive?.should be_false
   end
 
-  it 'has a genotype' do
-    @adam.genotype.should_not be_nil
+  context 'genetics' do
+    it 'has a genotype' do
+      @adam.genotype.should_not be_nil
+    end
   end
 
 end
