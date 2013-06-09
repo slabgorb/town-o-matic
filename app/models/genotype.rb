@@ -43,34 +43,6 @@ class Genotype
     self.genes.inject(0){ |memo, gene| memo += gene.to_i(16)}
   end
 
-  # walks through the genes and checks the genes against the
-  # expression table, resulting in a hash of expressed genes.
-  # for example:
-  #
-  # {:hair=>{:blond=>2, :red=>1, :pink=>1, :plaid=>0}}
-  #
-  # This is meant to be consumed by a description engine of some kind.
-  #
-  def express(exps = Genotype.expressions, set = genes.join )
-    result = { }
-    exps.each_pair do |category, value|
-      if value.is_a? Hash
-        result[category] = self.express(value, set)
-      elsif value.is_a? Array
-        matches = 0
-        position = 0
-        value.each do |expression|
-          while position
-            position = set.index(expression, position + 1)
-            matches += 1 if position
-          end
-        end
-        result[category] ||= 0
-        result[category] += matches
-      end
-    end
-    result
-  end
 
   # proxy to the genes array
   def method_missing(meth, *args, &block)
