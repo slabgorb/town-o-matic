@@ -7,7 +7,6 @@ class Being
   field :gender, :type => String
 
   embeds_one :genotype
-
   has_one :phenotype
 
   has_and_belongs_to_many :spouses, class_name: 'Being'
@@ -17,15 +16,12 @@ class Being
   scope :living, -> { where(alive: true) }
   scope :dead, -> { where(alive: false) }
 
-
-
   ##
   # Die!
   #
   def die!
     update_attribute(:alive,  false)
   end
-
 
   ##
   # Is this being alive?
