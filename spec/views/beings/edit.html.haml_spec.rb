@@ -16,11 +16,9 @@ describe "beings/edit" do
 
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     assert_select "form[action=?][method=?]", being_path(@being), "post" do
-      assert_select "input#being_name[name=?]", "being[name]"
       assert_select "input#being_age[name=?]", "being[age]"
       assert_select "input#being_alive[name=?]", "being[alive]"
-      assert_select "input#being_history[name=?]", "being[history]"
-      assert_select "input#being_gender[name=?]", "being[gender]"
+      assert_select "select#being_gender[name=?]", "being[gender]"
     end
   end
 end
