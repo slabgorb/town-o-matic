@@ -13,9 +13,9 @@
   - @phenotypes.each do |phenotype|
     %tr
       %td= phenotype.name
-      %td= phenotype.morphology
-      %td= phenotype.development
-      %td= phenotype.behavior
+      %td= phenotype.morphology_expression
+      %td= phenotype.development_expression
+      %td= phenotype.behavior_expression
       %td= link_to 'Show', phenotype
       %td= link_to 'Edit', edit_phenotype_path(phenotype)
       %td= link_to 'Destroy', phenotype, :method => :delete, :data => { :confirm => 'Are you sure?' }
