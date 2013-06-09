@@ -10,7 +10,7 @@ class Genotype
   # @see value
   # @param other Genotype
   def <=>(other)
-    other.value <=> value
+    other.to_i <=> to_i
   end
 
   def to_s
@@ -21,37 +21,28 @@ class Genotype
     genes
   end
 
-  #
-  # Calculates the sum of base 10 values for the array of genes.
-  #
-  def value
-    genes.inject(0){ |memo, g| memo += g.to_i(16) }
+  # sort the genes by the base10 value of the hex number
+  def sort
+    genes.sort { |a,b| a.to_i(16) <=> b.to_i(16) }
   end
 
+  # return the sum of the base10 values of the genes
+  def to_i(index)
+    inject(0){ |memo, gene| memo += gene.to_i(16)}
+  end
 
   # creates a random set of genes
   def randomize!(genecount = 100)
     update_attribute(genes, Array(1..genecount).map { Genotype.rand_hex  })
   end
 
-  def self.expressions
-    @@expressions
-  end
-
-  # to integer
-  def to_i(index)
-    self.genes.inject(0){ |memo, gene| memo += gene.to_i(16)}
-  end
-
-
   # proxy to the genes array
   def method_missing(meth, *args, &block)
     genes.send(meth, *args, &block)
   end
 
-
   # gene at the supplied index value
-
+  # TODO: figure out why this is not proxying
   def [](index)
     genes[index]
   end
@@ -78,7 +69,7 @@ class Genotype
   end
 
   #
-  # generates a 6 digit hex number as a string
+  # generates a six digit hex number as a string
   #
   def self.rand_hex
     ("%06x" % (rand * 16777215).floor).upcase
