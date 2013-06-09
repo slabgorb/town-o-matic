@@ -2,7 +2,7 @@ class Genotype
   include Mongoid::Document
   include Mongoid::Timestamps::Created
   embedded_in :being
-  field :genes, type: Array, default: []
+  field :genes, type: Array, default:[]
   index({ genes: 1 })
 
   #
@@ -14,7 +14,11 @@ class Genotype
   end
 
   def to_s
-    genes.join(' ')
+    genes.join
+  end
+
+  def to_a
+    genes
   end
 
   #
@@ -26,9 +30,8 @@ class Genotype
 
 
   # creates a random set of genes
-  def randomize!(genecount = 10)
-    genecount.times.each { self << Genotype.rand_hex  }
-    self
+  def randomize!(genecount = 100)
+    update_attribute(genes, Array(1..genecount).map { Genotype.rand_hex  })
   end
 
   def self.expressions
@@ -69,33 +72,16 @@ class Genotype
     result
   end
 
-  #
+  # proxy to the genes array
+  def method_missing(meth, *args, &block)
+    genes.send(meth, *args, &block)
+  end
+
+
   # gene at the supplied index value
-  #
+
   def [](index)
     genes[index]
-  end
-
-  #
-  # append a gene
-  #
-  def <<(gene)
-    genes << gene
-  end
-
-  #
-  # length represents the length of the gene array.
-  #
-  def length
-    genes.length
-  end
-
-
-  #
-  # set the gene at the supplied index value
-  #
-  def []=(index, value)
-    genes[index] = value
   end
 
   #
@@ -105,7 +91,7 @@ class Genotype
   #
   def reproduce_with(other)
     c = Genotype.new
-    self.length.times do |i|
+    length.times do |i|
       c  << ((rand > 0.5) ? self[i] : other[i])
     end
     c
