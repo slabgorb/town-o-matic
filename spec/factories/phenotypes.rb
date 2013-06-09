@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :phenotype do
-    name "MyString"
+    name "Test"
     morphology_expression YAML.load_file('spec/morphology.yml')
     behavior_expression YAML.load_file('spec/behavior.yml')
   end
