@@ -8,7 +8,9 @@
   .container-fluid
     .field
       = f.label :names
-      %input#being_names{ type: 'text', placeholder: 'Name', name: "being[names][]" }
+      - names = @being.names || ['']
+      - names.each do |name|
+        %input.being-name{ type: 'text', value: name, placeholder: 'Name', name: "being[names][]" }
     .field
       = f.label :age
       = f.number_field :age
