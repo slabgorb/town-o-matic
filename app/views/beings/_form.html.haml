@@ -7,8 +7,8 @@
           %li= msg
   .container-fluid
     .field
-      = f.label :name
-      %input.being-name{ type: 'text', placeholder: 'Name', name: "being['name'][]" }
+      = f.label :names
+      %input.being-name{ type: 'text', placeholder: 'Name', name: "being[names][]" }
     .field
       = f.label :age
       = f.number_field :age
