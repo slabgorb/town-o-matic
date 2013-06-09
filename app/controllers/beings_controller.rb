@@ -25,7 +25,6 @@ class BeingsController < ApplicationController
   # GET /beings/new.json
   def new
     @being = Being.new
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @being }
@@ -41,6 +40,7 @@ class BeingsController < ApplicationController
   # POST /beings.json
   def create
     @being = Being.new(params[:being])
+    @being.genotype = Genotype.new.randomize!
 
     respond_to do |format|
       if @being.save
