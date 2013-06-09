@@ -7,12 +7,14 @@ describe Phenotype do
   end
 
   it 'scans for matches' do
-    @phenotype.scan(@adam.genotype, '000').should_not be_nil
+    # get a match string from the actual genotype
+    to_be_matched = @adam.genotype.first
+    @phenotype.scan(@adam.genotype, '000').should be 3
   end
 
-  it 'expresses' do
-    @phenotype.expression(@adam.genotype.genes).should_not eq({ })
-  end
+  # it 'expresses' do
+  #   @phenotype.expression(@adam.genotype.genes).should_not eq({ })
+  # end
 end
 
 

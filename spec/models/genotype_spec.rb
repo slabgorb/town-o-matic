@@ -9,7 +9,7 @@ describe Genotype do
   end
 
   it "should give the indexed seed" do
-    @c0[0].should eq('6AC1F3')
+    @c0.first.should eq('6AC1F3')
   end
 
 
