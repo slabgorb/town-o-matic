@@ -1,6 +1,6 @@
 # Townomatic
 
-TODO: Write a gem description
+Create an instant town for use in role-playing games.
 
 ## Installation
 
@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+
 
 ## Contributing
 
