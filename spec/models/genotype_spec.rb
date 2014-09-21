@@ -13,21 +13,6 @@ describe Genotype do
   end
 
 
-  context "expression" do
-    it "should express the gene" do
-      expressions = {
-        hair: {
-          blond:['01'],
-          red:['02'],
-          pink:['03'],
-          plaid:['FF']
-        }
-      }
-      e = FactoryGirl.build(:labrat)
-      e.express(expressions).should eq({:hair=>{:blond=>1, :red=>1, :pink=>1, :plaid=>0}})
-    end
-  end
-
   context "mutation" do
     before :all do
       @m = FactoryGirl.build(:genotype)
@@ -45,7 +30,7 @@ describe Genotype do
     end
 
     it "should generate a value of the genome" do
-      @m.value.should be(89011217)
+      @m.to_i.should be(89011217)
     end
 
   end

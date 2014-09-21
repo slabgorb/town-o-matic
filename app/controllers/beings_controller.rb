@@ -40,10 +40,11 @@ class BeingsController < ApplicationController
   # POST /beings.json
   def create
     @being = Being.new(params[:being])
-    @being.genotype = Genotype.new.randomize!
 
     respond_to do |format|
       if @being.save
+        @being.genotype = Genotype.new
+        @being.genotype.randomize!
         format.html { redirect_to @being, notice: 'Being was successfully created.' }
         format.json { render json: @being, status: :created, location: @being }
       else

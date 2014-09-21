@@ -14,9 +14,8 @@ class Phenotype
     end
   end
 
-
   def scan(genotype, expression)
-    genotype.genes.join.scan(/#{expression}/).sum
+    genotype.to_s.scan(/#{expression}/)
   end
 
   def expression(genes)

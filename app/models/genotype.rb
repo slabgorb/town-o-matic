@@ -2,8 +2,8 @@ class Genotype
   include Mongoid::Document
   include Mongoid::Timestamps::Created
   embedded_in :being
-  field :genes, type: Array, default:[]
-  index({ genes: 1 })
+  field :genes_string, type: String, default:"[]"
+  index({ genes_string: 1 })
 
   #
   # Compare operator - compare the base 10 values
@@ -11,6 +11,10 @@ class Genotype
   # @param other Genotype
   def <=>(other)
     other.to_i <=> to_i
+  end
+
+  def genes
+    JSON::parse(genes_string)
   end
 
   def to_s
@@ -33,18 +37,27 @@ class Genotype
 
   # creates a random set of genes
   def randomize!(genecount = 100)
+    update_attribute(genes, nil)
     update_attribute(genes, Array(1..genecount).map { Genotype.rand_hex  })
   end
 
   # proxy to the genes array
   def method_missing(meth, *args, &block)
-    genes.send(meth, *args, &block)
+    begin
+      genes.send(meth, *args, &block)
+    rescue NoMethodError
+      super
+    end
   end
 
   # gene at the supplied index value
   # TODO: figure out why this is not proxying
   def [](index)
     genes[index]
+  end
+
+  def genes=(ary)
+    genes_string = Array(ary).to_json
   end
 
   #
