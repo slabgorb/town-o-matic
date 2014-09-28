@@ -1,16 +1,23 @@
 module Townomatic
   module Family
 
-    class Member
+    class Member < Person
 
       attr_reader :parents, :children, :spouses
-      attr_accessor :name
 
-      def initialize(name='')
+      def initialize(given_name = '', family_name='')
         @children = []
         @parents = []
-        @name = name
+        super(given_name: given_name, family_name: family_name)
         @spouses = []
+      end
+
+      def family_name
+        @names[:family_name]
+      end
+
+      def family_name=(name)
+        @names[:family_name] = name
       end
 
       def <<(child)
@@ -42,13 +49,15 @@ module Townomatic
       end
 
       def siblings
-        parents.map{ |parent| parent.children }.flatten.keep_if{ |c| c != self }
+        parents.map{ |parent| parent.children }.flatten.select{ |c| c != self }
       end
+
 
       def add(child)
         raise "Child already added" if @children.include?(child)
         @children << child
         child.add_parent self
+        child.family_name = self.family_name
         @spouses.each{ |spouse| child.add_parent(spouse) }
       end
     end

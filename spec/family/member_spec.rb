@@ -1,12 +1,12 @@
 require 'spec_helper'
 describe Townomatic::Family::Member do
   before :each do
-    @adam = Townomatic::Family::Member.new('Adam')
-    @child = Townomatic::Family::Member.new('Cain')
-    @eve = Townomatic::Family::Member.new('Eve')
+    @adam = Townomatic::Family::Member.new('Adam', 'Man')
+    @child = Townomatic::Family::Member.new('Cain', 'Son')
+    @eve = Townomatic::Family::Member.new('Eve', 'Man')
     @adam.marry @eve
     @adam << @child
-    @delilah = Townomatic::Family::Member.new('Delilah')
+    @delilah = Townomatic::Family::Member.new('Delilah', 'Temptress')
   end
 
   it 'knows spouses' do
@@ -25,6 +25,10 @@ describe Townomatic::Family::Member do
 
   it 'adds a child to a parent' do
     expect(@adam.children.include?(@child)).to be true
+  end
+
+  it 'gives the child the last name of the parent' do
+    expect(@child.family_name).to eq 'Man'
   end
 
   it 'disallows adding an extant child to a parent' do
