@@ -9,6 +9,10 @@ module Townomatic
 
     def die!
       @living = false
+      @habitations.each do |habitation|
+        habitation.bury(self) if habitation.respond_to?(:bury)
+        habitation.remove!(self)
+      end
     end
 
     def alive?

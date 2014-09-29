@@ -4,6 +4,9 @@ describe Townomatic::Dwelling do
     @house = Townomatic::Dwelling.new('House')
     @adam = Townomatic::Family::Member.new('Adam', 'Man')
     @eve = Townomatic::Family::Member.new('Eve', 'Man')
+    @town = Townomatic::Town.new("My Town", @adam)
+    @town << @house
+
     @house << @adam
     @house << @eve
   end
@@ -16,5 +19,13 @@ describe Townomatic::Dwelling do
     expect(@house.population).to eq 2
   end
 
+  it "removes dead men from the population" do
+    @adam.die!
+    expect(@house.population).to eq 1
+  end
+
+  it "shows the location when expressed as a string" do
+    expect(@house.to_s).to eq "House in My Town"
+  end
 
 end
