@@ -1,18 +1,35 @@
 require "net/http"
+class ::Hash
+  def deep_merge(second)
+    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    self.merge(second, &merger)
+  end
+end
+
+class ::String
+  def blank?
+    self.strip.length == 0
+  end
+end
+
+class ::Array
+  def push_shift(val)
+    self.push(val).shift
+  end
+end
+
 module Townomatic
   module Language
     START_TOKEN = '^'
     END_TOKEN = '$'
+    LOOKBACK_DEFAULT = 2
+    MAX_WORD_SIZE = 15
     class Corpus < Hash
-      attr_reader :histo
-      START_TOKEN = '^'
-      END_TOKEN = '$'
+      attr_reader :histo, :lookback, :text
 
-      def initialize(file, lookback = 2)
-        @text = File.read(file).downcase.gsub(/[[:punct:]]/, ' ').gsub(/\s+|[0-9]/, END_TOKEN).split(//)
+      def initialize(file, lookback = LOOKBACK_DEFAULT)
+        @text = File.read(file).downcase.gsub(/[[:punct:]]|[0-9<>^]/, '').strip.split(/\s/).reject(&:blank?)
         @lookback = lookback
-        # @key = []
-        @key = [START_TOKEN] * @lookback
         histogram
       end
 
@@ -21,37 +38,41 @@ module Townomatic
       #
       def histogram
         @histo = Hash.new
+        @key = [START_TOKEN] * @lookback
         @text.each do |word|
-          add word
+          @key.push(START_TOKEN).shift
+          word.chars.each do |char|
+            @histo[@key.clone] ||= []
+            @histo[@key.clone] << char
+            @key.push_shift(char)
+          end
+          @key.push_shift(END_TOKEN)
         end
+        @histo.delete(@histo.keys.first)
       end
 
-      def add(word)
-        word.chars.each do |char|
-          ((@histo[@key.clone] ||= { })[char] ||= 0)
-          @histo[@key.clone][char] += 1
-          @key.push(char).shift
-        end
-      end
 
     end
 
 
-    class Language
+    class Words
 
-      attr_accessor :name, :lookback, :description, :glossary, :dictionary_file, :corpora
+      attr_accessor :name, :corpora
 
-      def initialize(corpora)
+      def initialize(corpora, lookback = LOOKBACK_DEFAULT)
+        corpora = [corpora] unless corpora.is_a? Array
         @corpora = corpora
+        @lookback = lookback
+        raise "All corpora must have the same length of lookback" unless (@corpora.map{ |c| c.lookback }.uniq.count == 1)
+        histogram
       end
 
       ##
       # Combines the histograms of the related corpora
       #
-      def histogram(force = false)
-        @histogram = nil if force
+      def histogram
         @histogram ||= @corpora.inject({ }) do |m, c|
-          m.deep_merge!(c.histogram(lookback))
+          m.deep_merge(c.histo)
         end
         @histogram
       end
@@ -67,39 +88,28 @@ module Townomatic
       # make a word from the histogram
       #
       def word
-        char = ''
-        key = [START_TOKEN] * lookback
+        char = nil
+        # choose a random start
+        key = @histogram.keys.select { |k| k[0] == START_TOKEN }.sample
         word = ''
-        while char.first != END_TOKEN
-          char = choice(key)
-          word += char.first if char
-          key.push(char.first).shift if char
+        while char != END_TOKEN && word.length < MAX_WORD_SIZE && @histogram[key]
+          char = @histogram[key].sample
+          word += char
+          key.push_shift(char)
         end
-        word.gsub(/[^[:[alpha]:]]/, '')
+        word.gsub(END_TOKEN,'')
       end
 
       ##
       # select a character based on a random value compared with the
       # character probability factorposition
       #
-      # for example, assuming a structure of
-      # a: 22
-      # d: 5
-      # e: 45
-      # ..etc
-      #
-      # c = new Charlist
-      # ... create structure as above ...
-      # c.choice(25)
-      # > 'd'
-      #
       def choice(key)
-        selection = rand(@histogram[key].map(&:length).sum)
-        position = 0
-        @histogram[key].each_with_index do |index, count|
-          return index if (position += count) > selection
+        @histogram[key].to_a.each do |letter_count|
+          p letter_count
+          p [position, letter_count[1]]
+          return letter_count[0] if (position += letter_count[1]) > selection
         end
-        @histogram[key].first
       end
 
     end

@@ -7,7 +7,7 @@ describe Townomatic::Language::Corpus do
 
   context 'histogram' do
     it 'compiles' do
-      expect(@corpus.histo[["^", "^"]]).to eq({"w"=>1})
+      expect(@corpus.histo[["^", "w"]]).to eq(["e", "e"])
     end
   end
 
