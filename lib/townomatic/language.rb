@@ -1,4 +1,5 @@
 require "net/http"
+require 'debugger'
 class ::Hash
   def deep_merge(second)
     merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
@@ -24,6 +25,7 @@ module Townomatic
     END_TOKEN = '$'
     LOOKBACK_DEFAULT = 2
     MAX_WORD_SIZE = 15
+    MIN_WORD_SIZE = 1
     class Corpus < Hash
       attr_reader :histo, :lookback, :text
 
@@ -38,15 +40,15 @@ module Townomatic
       #
       def histogram
         @histo = Hash.new
-        @key = [START_TOKEN] * @lookback
+        key = [START_TOKEN] * @lookback
         @text.each do |word|
-          @key.push(START_TOKEN).shift
+          key.push_shift(START_TOKEN)
           word.chars.each do |char|
-            @histo[@key.clone] ||= []
-            @histo[@key.clone] << char
-            @key.push_shift(char)
+            @histo[key.clone] ||= []
+            @histo[key.clone] << char
+            key.push_shift(char)
           end
-          @key.push_shift(END_TOKEN)
+          @histo[key.clone] << END_TOKEN if @histo[key]
         end
         @histo.delete(@histo.keys.first)
       end
@@ -74,42 +76,25 @@ module Townomatic
         @histogram ||= @corpora.inject({ }) do |m, c|
           m.deep_merge(c.histo)
         end
+        @start_keys = @histogram.keys.select { |k| k[0] == START_TOKEN }.sort
         @histogram
       end
 
-      ##
-      # Returns the deserialized glossary
-      #
-      def glossary(force = false)
-        JSON.parse glossary_json
-      end
 
       ##
       # make a word from the histogram
       #
       def word
         char = nil
-        # choose a random start
-        key = @histogram.keys.select { |k| k[0] == START_TOKEN }.sample
-        word = ''
-        while char != END_TOKEN && word.length < MAX_WORD_SIZE && @histogram[key]
-          char = @histogram[key].sample
+        key = @start_keys.sample.clone
+        debugger
+        word = key.last
+        while char != END_TOKEN
+          char = @histogram[key.clone].sample
           word += char
           key.push_shift(char)
         end
         word.gsub(END_TOKEN,'')
-      end
-
-      ##
-      # select a character based on a random value compared with the
-      # character probability factorposition
-      #
-      def choice(key)
-        @histogram[key].to_a.each do |letter_count|
-          p letter_count
-          p [position, letter_count[1]]
-          return letter_count[0] if (position += letter_count[1]) > selection
-        end
       end
 
     end

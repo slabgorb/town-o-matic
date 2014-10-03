@@ -8,7 +8,7 @@ describe Townomatic::Language::Words do
   end
 
   it 'makes words' do
-    expect(@words.word).to eq('ordaings')
+    expect(@words.word).to eq('efeneric')
   end
 
 end

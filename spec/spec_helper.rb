@@ -1,2 +1,2 @@
 require_relative '../lib/townomatic'
-srand 100
+srand 101
