@@ -89,15 +89,17 @@ module Townomatic
         #debugger
         key = @start_keys.clone.sample
         #p key
+        if key
+          word = key.last
+          while char != END_TOKEN
+            break if @histogram[key].nil?
+            char = @histogram[key].clone.sample
+            word += char
+            key.push_shift(char)
+          end
+          word.gsub(END_TOKEN,'')
 
-        word = key.last
-        while char != END_TOKEN
-          break if @histogram[key].nil?
-          char = @histogram[key].clone.sample
-          word += char
-          key.push_shift(char)
         end
-        word.gsub(END_TOKEN,'')
       end
 
     end
