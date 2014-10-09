@@ -76,7 +76,6 @@ module Townomatic
         @histogram ||= @corpora.inject({ }) do |m, c|
           m.deep_merge(c.histo)
         end
-        @start_keys = @histogram.keys.select { |k| k[0] == START_TOKEN }.sort
         @histogram
       end
 
@@ -85,12 +84,16 @@ module Townomatic
       # make a word from the histogram
       #
       def word
+        @start_keys = @histogram.keys.select { |k| k[0] == START_TOKEN }.sort
         char = nil
-        key = @start_keys.sample.clone
-        debugger
+        #debugger
+        key = @start_keys.clone.sample
+        #p key
+
         word = key.last
         while char != END_TOKEN
-          char = @histogram[key.clone].sample
+          break if @histogram[key].nil?
+          char = @histogram[key].clone.sample
           word += char
           key.push_shift(char)
         end
