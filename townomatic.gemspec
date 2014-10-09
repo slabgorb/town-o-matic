@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Keith Avery"]
   spec.email         = ["slabgorb@gmail.com"]
   spec.summary       = %q{Instant town!}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.description   = %q{Make a fantasy town with names and family relationships.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
